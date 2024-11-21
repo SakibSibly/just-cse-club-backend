@@ -26,14 +26,14 @@ class DepartmentListView(APIView):
 
 
 class DepartmentDetailView(APIView):
-    def get_object(self, department_id):
+    def get_object(self, serial_number):
         try:
-            return Department.objects.get(id=department_id)
+            return Department.objects.get(serial_number=serial_number)
         except Department.DoesNotExist:
             raise Http404
 
-    def get(self, request, department_id):
-        department = self.get_object(department_id)
+    def get(self, request, serial_number):
+        department = self.get_object(serial_number)
         serializer = DepartmentSerializer(department)
         return Response(serializer.data)
 
