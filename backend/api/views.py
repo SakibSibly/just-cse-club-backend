@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Department, Faculty
-from .serializers import DepartmentSerializer, FacultySerializer
+from .models import Department, Faculty, Blog, Comment, Event, Notice
+from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
 
 
@@ -93,4 +93,184 @@ class FacultyDetailView(APIView):
     def delete(self, request, faculty_id):
         faculty = self.get_object(faculty_id)
         faculty.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BlogListView(APIView):
+    def get(self, request):
+        blogs = Blog.objects.all()
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = BlogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        blogs = Blog.objects.all()
+        blogs.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BlogDetailView(APIView):
+    def get_object(self, blog_id):
+        try:
+            return Blog.objects.get(id=blog_id)
+        except Blog.DoesNotExist:
+            raise Http404
+
+    def get(self, request, blog_id):
+        blog = self.get_object(blog_id)
+        serializer = BlogSerializer(blog)
+        return Response(serializer.data)
+
+    def put(self, request, blog_id):
+        blog = self.get_object(blog_id)
+        serializer = BlogSerializer(blog, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, blog_id):
+        blog = self.get_object(blog_id)
+        blog.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class CommentListView(APIView):
+    def get(self, request):
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        comments = Comment.objects.all()
+        comments.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentDetailView(APIView):
+    def get_object(self, comment_id):
+        try:
+            return Comment.objects.get(id=comment_id)
+        except Comment.DoesNotExist:
+            raise Http404
+
+    def get(self, request, comment_id):
+        comment = self.get_object(comment_id)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
+
+    def put(self, request, comment_id):
+        comment = self.get_object(comment_id)
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, comment_id):
+        comment = self.get_object(comment_id)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventListView(APIView):
+    def get(self, request):
+        events = Event.objects.all()
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = EventSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        events = Event.objects.all()
+        events.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventDetailView(APIView):
+    def get_object(self, event_id):
+        try:
+            return Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            raise Http404
+
+    def get(self, request, event_id):
+        event = self.get_object(event_id)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+
+    def put(self, request, event_id):
+        event = self.get_object(event_id)
+        serializer = EventSerializer(event, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, event_id):
+        event = self.get_object(event_id)
+        event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NoticeListView(APIView):
+    def get(self, request):
+        notices = Notice.objects.all()
+        serializer = NoticeSerializer(notices, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = NoticeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        notices = Notice.objects.all()
+        notices.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NoticeDetailView(APIView):
+    def get_object(self, notice_id):
+        try:
+            return Notice.objects.get(id=notice_id)
+        except Notice.DoesNotExist:
+            raise Http404
+
+    def get(self, request, notice_id):
+        notice = self.get_object(notice_id)
+        serializer = NoticeSerializer(notice)
+        return Response(serializer.data)
+
+    def put(self, request, notice_id):
+        notice = self.get_object(notice_id)
+        serializer = NoticeSerializer(notice, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, notice_id):
+        notice = self.get_object(notice_id)
+        notice.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
