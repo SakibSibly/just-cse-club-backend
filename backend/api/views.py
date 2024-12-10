@@ -1,10 +1,48 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate
 from rest_framework import status
-from .models import Department, Faculty, Blog, Comment, Event, Notice
+from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice
 from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
 
+
+class CustomLoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class CustomLogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+            return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
+        except:
+            return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class CustomUserCreate(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = CustomUser.objects.create_user(username=username, email=email, password=password)
+        user.save()
+        return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
 
 class DepartmentListView(APIView):
     def get(self, request):
@@ -52,6 +90,8 @@ class DepartmentDetailView(APIView):
 
 
 class FacultyListView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         faculty = Faculty.objects.all()
         serializer = FacultySerializer(faculty, many=True)
@@ -71,6 +111,8 @@ class FacultyListView(APIView):
     
 
 class FacultyDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, faculty_id):
         try:
             return Faculty.objects.get(id=faculty_id)
