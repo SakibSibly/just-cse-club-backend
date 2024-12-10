@@ -6,7 +6,7 @@ from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notic
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'city', 'created_at', 'updated_at']
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
