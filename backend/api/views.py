@@ -2,30 +2,28 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import authenticate
 from rest_framework import status
 from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice
+from .serializers import CustomUserSerializer
 from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 
 class CustomLoginView(APIView):
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
+        user = get_object_or_404(CustomUser, email=request.data.get('email'))
 
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        if not user.check_password(request.data.get('password')):
+            return Response({"details": 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+        token, created = Token.objects.get_or_create(user=user)
+        serializer = CustomUserSerializer(instance=user)
+        return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK)
     
-
 
 class CustomLogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
 
     def post(self, request):
         try:
@@ -37,12 +35,18 @@ class CustomLogoutView(APIView):
 
 class CustomUserCreate(APIView):
     def post(self, request):
-        username = request.data.get('username')
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = CustomUser.objects.create_user(username=username, email=email, password=password)
-        user.save()
-        return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+        serializer = CustomUserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = CustomUser.objects.get(email=request.data.get('email'))
+            user.set_password(request.data.get('password'))
+            user.save()
+            token = Token.objects.create(user=user)
+            return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class DepartmentListView(APIView):
     def get(self, request):
