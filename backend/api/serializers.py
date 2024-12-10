@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import Department, Faculty, Blog, Comment, Event, Notice
+from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice
+
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
