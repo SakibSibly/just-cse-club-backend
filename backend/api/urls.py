@@ -1,8 +1,12 @@
+from rest_framework.authtoken.views import obtain_auth_token
 from django.urls import path
 from . import views
 
 
 urlpatterns = [
+    path('login/', views.CustomLoginView.as_view(), name='api-login'),
+    path('register/', views.CustomUserCreate.as_view(), name='api-register'),
+    path('logout/', views.CustomLogoutView.as_view(), name='api-logout'),
     path('departments/', views.DepartmentListView.as_view(), name='department-list'),
     path('departments/<int:serial_number>/', views.DepartmentDetailView.as_view(), name='department-detail'),
     path('faculties/', views.FacultyListView.as_view(), name='faculty-list'),
