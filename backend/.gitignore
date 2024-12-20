@@ -13,3 +13,6 @@ venv/
 .idea/
 .cph/
 .DS_Store
+
+# Testing Files
+*.rest
