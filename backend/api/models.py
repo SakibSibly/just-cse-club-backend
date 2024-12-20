@@ -1,6 +1,14 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
+class Role(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
@@ -24,6 +32,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     city = models.CharField(null=True, max_length=50)
+    role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # Regular user, not staff by default
     created_at = models.DateTimeField(auto_now_add=True)
@@ -65,7 +74,7 @@ class Blog(models.Model):
     description = models.TextField()
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
-    # author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -75,7 +84,7 @@ class Blog(models.Model):
 
 class Comment(models.Model):    
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
