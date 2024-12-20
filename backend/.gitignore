@@ -16,3 +16,4 @@ venv/
 
 # Testing Files
 *.rest
+REQUEST_TESTER.py
