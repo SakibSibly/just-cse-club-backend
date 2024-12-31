@@ -8,7 +8,38 @@ from .serializers import CustomUserSerializer
 from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
+from django.conf import settings
+# from decouple import config
+import random
 
+class VerifyEmailView(APIView):
+    def post(self, request):
+        receiver_email = request.data.get('email')
+
+        if CustomUser.objects.filter(email=receiver_email):
+            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            subject = "JUST CSE Club Account Verification OTP"
+
+            message = "Thank your for registering with JUST CSE Club.\n\nPlease verify your email address.\n\n"
+            message += "Your OTP is: " + str(random.randint(100000, 999999))
+            message += "\n\nJUST CSE Club"
+            message += "\nDepartment of Computer Science and Engineering"
+            message += "\nJashore University of Sciene and Technolgy"
+            message += "\nJashore, 7408"
+
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [receiver_email],
+                fail_silently=False
+            )
+            return Response({'message': 'Mail sent successfully'}, status=status.HTTP_200_OK)
+        except:
+            return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomLoginView(APIView):
     def post(self, request):
