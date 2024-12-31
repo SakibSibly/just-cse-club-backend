@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path('verify/', views.VerifyEmailView.as_view(), name='verify-email'),
+    path('verification/', views.VerifyEmailView.as_view(), name='email-verification'),
     path('login/', views.CustomLoginView.as_view(), name='api-login'),
     path('register/', views.CustomUserCreate.as_view(), name='api-register'),
     path('logout/', views.CustomLogoutView.as_view(), name='api-logout'),
