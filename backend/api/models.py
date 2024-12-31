@@ -48,6 +48,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
+class OTP(models.Model):
+    email = models.EmailField()
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class Department(models.Model):
     serial_number = models.IntegerField()
     full_name = models.CharField(max_length=100)
