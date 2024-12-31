@@ -3,14 +3,14 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice
+from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice
 from .serializers import CustomUserSerializer
 from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
-# from decouple import config
+from decouple import config
 import random
 
 class VerifyEmailView(APIView):
@@ -20,11 +20,18 @@ class VerifyEmailView(APIView):
         if CustomUser.objects.filter(email=receiver_email):
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
         
+        if OTP.objects.filter(email=receiver_email):
+            OTP.objects.filter(email=receiver_email).delete()
+
         try:
+            generated_otp = str(random.randint(config('LOWER_BOUNDARY', cast=int), config('UPPER_BOUNDARY', cast=int)))
+            otp = OTP(email=receiver_email, otp=generated_otp)
+            otp.save()
+
             subject = "JUST CSE Club Account Verification OTP"
 
             message = "Thank your for registering with JUST CSE Club.\n\nPlease verify your email address.\n\n"
-            message += "Your OTP is: " + str(random.randint(100000, 999999))
+            message += "Your OTP is: " + generated_otp
             message += "\n\nJUST CSE Club"
             message += "\nDepartment of Computer Science and Engineering"
             message += "\nJashore University of Sciene and Technolgy"
@@ -40,6 +47,18 @@ class VerifyEmailView(APIView):
             return Response({'message': 'Mail sent successfully'}, status=status.HTTP_200_OK)
         except:
             return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyOTPView(APIView):
+    def post(self, request):
+        receiver_email = request.data.get('email')
+        otp = request.data.get('otp')
+
+        if OTP.objects.filter(email=receiver_email, otp=otp):
+            OTP.objects.filter(email=receiver_email).delete()
+            return Response({'message': 'OTP verified successfully'}, status=status.HTTP_200_OK)
+        
+        return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CustomLoginView(APIView):
     def post(self, request):
