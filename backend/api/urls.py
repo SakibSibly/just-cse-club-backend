@@ -1,13 +1,13 @@
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.urls import path
 from . import views
 
 
 urlpatterns = [
     path('verification/', views.VerifyEmailView.as_view(), name='email-verification'),
-    path('login/', views.CustomLoginView.as_view(), name='api-login'),
+    path('token/', TokenObtainPairView.as_view(), name='get-token'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='refresh-token'),
     path('register/', views.CustomUserCreate.as_view(), name='api-register'),
-    path('logout/', views.CustomLogoutView.as_view(), name='api-logout'),
     path('departments/', views.DepartmentListView.as_view(), name='department-list'),
     path('departments/<int:serial_number>/', views.DepartmentDetailView.as_view(), name='department-detail'),
     path('faculties/', views.FacultyListView.as_view(), name='faculty-list'),
