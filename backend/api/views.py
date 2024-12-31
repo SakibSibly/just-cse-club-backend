@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice
@@ -92,8 +91,7 @@ class CustomUserCreate(APIView):
             user = CustomUser.objects.get(email=request.data.get('email'))
             user.set_password(request.data.get('password'))
             user.save()
-            token = Token.objects.create(user=user)
-            return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
