@@ -60,27 +60,27 @@ class VerifyOTPView(APIView):
         return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CustomLoginView(APIView):
-    def post(self, request):
-        user = get_object_or_404(CustomUser, email=request.data.get('email'))
+# class CustomLoginView(APIView):
+#     def post(self, request):
+#         user = get_object_or_404(CustomUser, email=request.data.get('email'))
 
-        if not user.check_password(request.data.get('password')):
-            return Response({"details": 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+#         if not user.check_password(request.data.get('password')):
+#             return Response({"details": 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
-        token, created = Token.objects.get_or_create(user=user)
-        serializer = CustomUserSerializer(instance=user)
-        return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK)
+#         token, created = Token.objects.get_or_create(user=user)
+#         serializer = CustomUserSerializer(instance=user)
+#         return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK)
     
 
-class CustomLogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+# class CustomLogoutView(APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        try:
-            request.user.auth_token.delete()
-            return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
-        except:
-            return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         try:
+#             request.user.auth_token.delete()
+#             return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
+#         except:
+#             return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
         
 
 class CustomUserCreate(APIView):
