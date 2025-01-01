@@ -56,6 +56,21 @@
     background-color: #0056b3;
 }
 
+.register-link {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.register-link a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .error-message {
     color: red;
     font-weight: bold;

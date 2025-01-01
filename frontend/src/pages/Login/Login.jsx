@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Login.css";
 import api from "../../api";
 import { ACCESS_TOKEN } from "../../constants";
@@ -63,6 +64,9 @@ const Login = () => {
                 <button type="submit" className="login-button">
                     Login
                 </button>
+                <p className="register-link">
+                    Don't have an account? <Link to="/register">Register</Link>
+                </p>
             </form>
         </div>
     );
