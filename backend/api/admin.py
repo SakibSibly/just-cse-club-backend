@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Role, CustomUser, Department, Faculty, Blog, Comment, Event, Notice
+from .models import Role, OTP, CustomUser, Department, Faculty, Blog, Comment, Event, Notice
 
 
 admin.site.register(Role)
+admin.site.register(OTP)
 admin.site.register(CustomUser)
 admin.site.register(Department)
 admin.site.register(Faculty)
