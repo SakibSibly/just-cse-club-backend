@@ -1,8 +1,36 @@
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { ACCESS_TOKEN } from "../../constants";
 
 
 const Navbar = () => {
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // console.log(localStorage.getItem(ACCESS_TOKEN));
+        if (localStorage.getItem(ACCESS_TOKEN)) {
+            setLoggedIn(true);
+        }
+    }
+    , []);
+
+    const HandleUserStatus = () => {
+        if (loggedIn) {
+            return (
+                <div>
+                    <Link to="/logout">Logout</Link>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <Link to="/login">Login</Link>
+                </div>
+            )
+        }
+    }
+
     return (
         <nav className="navbar">
                 <ul className="navbar-menu">
@@ -22,6 +50,13 @@ const Navbar = () => {
                         <Link to="/treasury">Treasury</Link>
                     </li>
                 </ul>
+                <div>
+                    <ul className="navbar-menu">
+                        <li>
+                            <HandleUserStatus />
+                        </li>
+                    </ul>
+                </div>
         </nav>
     );
 };
