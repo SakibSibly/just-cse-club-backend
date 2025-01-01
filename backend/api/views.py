@@ -86,6 +86,9 @@ class CustomUserCreate(APIView):
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
 
+        if CustomUser.objects.filter(username=request.data.get('username')):
+            return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
         if serializer.is_valid():
             serializer.save()
             user = CustomUser.objects.get(email=request.data.get('email'))
