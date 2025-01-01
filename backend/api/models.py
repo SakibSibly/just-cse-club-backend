@@ -53,6 +53,9 @@ class OTP(models.Model):
     otp = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.email + ' - ' + self.otp
+
 
 class Department(models.Model):
     serial_number = models.IntegerField()
