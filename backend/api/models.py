@@ -31,7 +31,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    is_email_verified = models.BooleanField(default=False)
     city = models.CharField(null=True, max_length=50)
     role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
