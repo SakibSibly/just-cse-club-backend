@@ -105,8 +105,7 @@ class Comment(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    date = models.DateField()
-    time = models.TimeField()
+    date = models.DateTimeField()
     venue = models.CharField(max_length=200)
     # image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
