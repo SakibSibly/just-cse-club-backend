@@ -195,7 +195,7 @@ class FacultyDetailView(APIView):
 
 class BlogListView(APIView):
     def get(self, request):
-        blogs = Blog.objects.all()[::-1]
+        blogs = Blog.objects.order_by('-created_at')
         serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data)
 
@@ -285,7 +285,7 @@ class CommentDetailView(APIView):
 
 class EventListView(APIView):
     def get(self, request):
-        events = Event.objects.all()[::-1]
+        events = Event.objects.order_by('-date')
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
@@ -330,7 +330,7 @@ class EventDetailView(APIView):
 
 class NoticeListView(APIView):
     def get(self, request):
-        notices = Notice.objects.all()[::-1]
+        notices = Notice.objects.order_by('-created_at')
         serializer = NoticeSerializer(notices, many=True)
         return Response(serializer.data)
 
