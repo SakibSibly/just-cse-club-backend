@@ -6,7 +6,7 @@ from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, 
 from .serializers import CustomUserSerializer
 from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
 from django.http import Http404
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 from decouple import config
@@ -88,6 +88,9 @@ class CustomUserCreate(APIView):
 
         if CustomUser.objects.filter(username=request.data.get('username')):
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if CustomUser.objects.filter(email=request.data.get('email')):
+            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
             serializer.save()
