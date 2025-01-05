@@ -22,7 +22,6 @@ class FacultySerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
     class Meta:
         model = Blog
         fields = '__all__'
