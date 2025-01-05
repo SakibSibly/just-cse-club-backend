@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('verify/email/', views.VerifyEmailView.as_view(), name='email-verification'),
     path('verify/otp/', views.VerifyOTPView.as_view(), name='otp-verification'),
+    path('verify/admin/', views.VerifyAdminView.as_view(), name='admin-verification'),
     path('token/', TokenObtainPairView.as_view(), name='get-token'),
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh-token'),
     path('register/', views.CustomUserCreate.as_view(), name='api-register'),
