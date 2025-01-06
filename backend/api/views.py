@@ -34,7 +34,7 @@ class VerifyEmailView(APIView):
             message += "\n\nJUST CSE Club"
             message += "\nDepartment of Computer Science and Engineering"
             message += "\nJashore University of Sciene and Technolgy"
-            message += "\nJashore, 7408"
+            message += "\nJashore-7408, Bangladesh"
 
             send_mail(
                 subject,
