@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice
+from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice, Feedback, Tag
 
 
 
@@ -44,3 +44,14 @@ class NoticeSerializer(serializers.ModelSerializer):
         model = Notice
         fields = '__all__'
 
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = '__all__'

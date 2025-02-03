@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice
+from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice, Tag, Feedback
 from .serializers import CustomUserSerializer
-from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer
+from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer, TagSerializer, FeedbackSerializer
 from django.http import Http404
 # from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -361,3 +361,30 @@ class NoticeDetailView(APIView):
         notice = self.get_object(notice_id)
         notice.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TagView(APIView):
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serilizer = TagSerializer(data=request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response(serilizer.data, status=status.HTTP_201_CREATED)
+        return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class FeedbackView(APIView):
+    def post(self, request):
+        received_data = request.data
+        received_data['name'] = request.user.id
+        serializer = FeedbackSerializer(data=received_data)
+        print(f"[DEBUG]: {request.data}")
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -22,5 +22,6 @@ urlpatterns = [
     path('events/<int:event_id>/', views.EventDetailView.as_view(), name='event-detail'),
     path('notices/', views.NoticeListView.as_view(), name='notice-list'),
     path('notices/<int:notice_id>/', views.NoticeDetailView.as_view(), name='notice-detail'),
-    
+    path('feedbacks/', views.FeedbackView.as_view(), name='feedback-handling'),
+    path('tags/', views.TagView.as_view(), name='tag-handling'),
 ]

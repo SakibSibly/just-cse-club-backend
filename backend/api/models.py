@@ -33,6 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     city = models.CharField(null=True, max_length=50)
     role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.CASCADE)
+    profile_pic = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # Regular user, not staff by default
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,6 +55,13 @@ class OTP(models.Model):
 
     def __str__(self):
         return self.email + ' - ' + self.otp
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Department(models.Model):
@@ -84,6 +92,9 @@ class Blog(models.Model):
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    tags = models.ManyToManyField("Tag", related_name="blogs")
+    read_time = models.CharField(max_length=20)
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -106,7 +117,15 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     date = models.DateTimeField()
-    venue = models.CharField(max_length=200)
+    funding_goal = models.IntegerField(default=0)
+    current_funding = models.IntegerField(default=0)
+    capacity = models.IntegerField(default=0)
+    registered = models.IntegerField(default=0)
+    location = models.CharField(max_length=200)
+    category = models.CharField(max_length=200)
+    full_description = models.TextField()
+    tags = models.ManyToManyField("Tag", related_name="events")
+    image_url = models.TextField()
     # image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -124,6 +143,21 @@ class Notice(models.Model):
     def __str__(self):
         return self.title
 
+## Needs more work
+# class Transaction(models.Model):
+#     title = models.CharField(max_length=200)
+#     description = models.TextField()
+#     amount = models.IntegerField(default=0)
+#     type = models.CharField(max_length=10, choices=[
+#         ('income', 'Income'),
+#         ('expense', 'Expense')
+#     ])
+#     reference = models.ForeignKey(to=[
+#         ('event', Event),
+#         ('notice', Notice),
+#     ], on_delete=models.CASCADE)
+#     date = models.DateTimeField()
+
 
 # class Gallery(models.Model):
 #     title = models.CharField(max_length=200)
@@ -136,14 +170,13 @@ class Notice(models.Model):
 #         return self.title
 
 
-# class Feedback(models.Model):
-#     # name = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-#     message = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class Feedback(models.Model):
+    name = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    message = models.TextField()
+    posted_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name.username
 
 
 # class About(models.Model):
