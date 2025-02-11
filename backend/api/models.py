@@ -143,6 +143,16 @@ class Notice(models.Model):
     def __str__(self):
         return self.title
 
+
+class Donation(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    occupation = models.CharField(max_length=100, null=True, blank=True)
+    trxID = models.CharField(max_length=20)
+    ref = models.CharField(max_length=50)
+    purpose = models.TextField()
+    add_info = models.TextField(null=True, blank=True)
+
+
 ## Needs more work
 # class Transaction(models.Model):
 #     title = models.CharField(max_length=200)
