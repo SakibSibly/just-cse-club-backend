@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice, Feedback, Tag
+from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice, Feedback, Tag, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post
 
 
 
@@ -54,4 +54,46 @@ class TagSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
+        fields = '__all__'
+
+
+class StatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stat
+        fields = '__all__'
+
+
+class GalleryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GalleryItem
+        fields = '__all__'
+
+
+class ResearchCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchCard
+        fields = '__all__'
+
+
+class AlumniCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlumniCard
+        fields = '__all__'
+
+
+class TimeLineItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeLineItem
+        fields = '__all__'
+
+
+class FacultyCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FacultyCard
+        fields = '__all__'
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
         fields = '__all__'

@@ -113,25 +113,25 @@ class Comment(models.Model):
         return self.text[:50] + '...'
 
 
-class Event(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    date = models.DateTimeField()
-    funding_goal = models.IntegerField(default=0)
-    current_funding = models.IntegerField(default=0)
-    capacity = models.IntegerField(default=0)
-    registered = models.IntegerField(default=0)
-    location = models.CharField(max_length=200)
-    category = models.CharField(max_length=200)
-    full_description = models.TextField()
-    tags = models.ManyToManyField("Tag", related_name="events")
-    image_url = models.TextField()
-    # image = models.ImageField(upload_to='event_images/', null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class Event(models.Model):
+#     title = models.CharField(max_length=200)
+#     description = models.TextField()
+#     date = models.DateTimeField()
+#     funding_goal = models.IntegerField(default=0)
+#     current_funding = models.IntegerField(default=0)
+#     capacity = models.IntegerField(default=0)
+#     registered = models.IntegerField(default=0)
+#     location = models.CharField(max_length=200)
+#     category = models.CharField(max_length=200)
+#     full_description = models.TextField()
+#     tags = models.ManyToManyField("Tag", related_name="events")
+#     image_url = models.TextField()
+#     # image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title
+#     def __str__(self):
+#         return self.title
 
 
 class Notice(models.Model):
@@ -197,3 +197,96 @@ class Feedback(models.Model):
 
 #     def __str__(self):
 #         return self.title
+
+
+### After the frontend is modified
+class Stat(models.Model):
+    number = models.IntegerField()
+    label = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.label
+
+
+class GalleryItem(models.Model):
+    image_url = models.TextField()
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class ResearchCard(models.Model):
+    title = models.CharField(max_length=500)
+    authors = models.TextField()
+    date = models.DateTimeField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class AlumniCard(models.Model):
+    image_url = models.TextField()
+    name = models.CharField(max_length=100)
+    year = models.TextField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class TimeLineItem(models.Model):
+    date = models.DateTimeField()
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    is_left = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+
+class FacultyCard(models.Model):
+    image_url = models.TextField()
+    name = models.CharField(max_length=100)
+    position = models.TimeField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Event(models.Model):
+    image_url = models.TextField()
+    organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    date = models.DateTimeField()
+    location = models.CharField(max_length=200)
+    description = models.TextField()
+    current_funds = models.IntegerField()
+    fundraising_goal = models.IntegerField()
+    registered_count = models.IntegerField()
+    registration_capacity = models.IntegerField()
+    interested_count = models.IntegerField()
+    category = models.CharField(max_length=200)
+    tags = models.ManyToManyField(Tag, related_name='events')
+
+    def __str__(self):
+        return self.title
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    excerpt = models.TextField()
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image_url = models.TextField()
+    tags = models.ManyToManyField(Tag, related_name='posts')
+    likes = models.IntegerField(default=0)
+    commnents = models.IntegerField(default=0)
+    date = models.DateTimeField()
+    content = models.TextField()
+    
+
+    def __str__(self):
+        return self.title

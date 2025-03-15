@@ -24,4 +24,11 @@ urlpatterns = [
     path('notices/<int:notice_id>/', views.NoticeDetailView.as_view(), name='notice-detail'),
     path('feedbacks/', views.FeedbackView.as_view(), name='feedback-handling'),
     path('tags/', views.TagView.as_view(), name='tag-handling'),
+    path('stats/', views.StatView.as_view(), name='stat-handling'),
+    path('gallery/', views.GalleryView.as_view(), name='gallery-handling'),
+    path('research/', views.ResearchView.as_view(), name='research-handling'),
+    path('alumni/', views.AlumniView.as_view(), name='alumni-handling'),
+    path('timeline/', views.TimeLineView.as_view(), name='timeline-handling'),
+    path('faculty-card/', views.FacultyCardView.as_view(), name='faculty-card-handling'),
+    path('posts/', views.PostView.as_view(), name='post-handling'),
 ]

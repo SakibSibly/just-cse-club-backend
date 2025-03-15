@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Role, OTP, CustomUser, Department, Faculty, Tag, Blog, Comment, Event, Notice, Feedback, Donation
+from .models import Role, OTP, CustomUser, Department, Faculty, Tag, Blog, Comment, Event, Notice, Feedback, Donation, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post
 
 
 admin.site.register(Role)
@@ -14,3 +14,10 @@ admin.site.register(Event)
 admin.site.register(Notice)
 admin.site.register(Feedback)
 admin.site.register(Donation)
+admin.site.register(Stat)
+admin.site.register(GalleryItem)
+admin.site.register(ResearchCard)
+admin.site.register(AlumniCard)
+admin.site.register(TimeLineItem)
+admin.site.register(FacultyCard)
+admin.site.register(Post)

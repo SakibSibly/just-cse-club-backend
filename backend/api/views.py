@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice, Tag, Feedback
+from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice, Tag, Feedback, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post
 from .serializers import CustomUserSerializer
-from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer, TagSerializer, FeedbackSerializer
+from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer, TagSerializer, FeedbackSerializer, StatSerializer, GalleryItemSerializer, ResearchCardSerializer, AlumniCardSerializer, TimeLineItemSerializer, FacultyCardSerializer, PostSerializer
 from django.http import Http404
 # from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -388,3 +388,126 @@ class FeedbackView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StatView(APIView):
+    def get(self, request):
+        stats = Stat.objects.all()
+        serializer = StatSerializer(stats, many=True)
+        return Response(serializer.data)
+
+
+class GalleryView(APIView):
+    def get(self, request):
+        gallery_items = GalleryItem.objects.all()
+        serializer = GalleryItemSerializer(gallery_items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = GalleryItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        gallery_items = GalleryItem.objects.all()
+        gallery_items.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ResearchView(APIView):
+    def get(self, request):
+        research_cards = ResearchCard.objects.all()
+        serializer = ResearchCardSerializer(research_cards, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ResearchCardSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        research_cards = ResearchCard.objects.all()
+        research_cards.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class AlumniView(APIView):
+    def get(self, request):
+        alumni_cards = AlumniCard.objects.all()
+        serializer = AlumniCardSerializer(alumni_cards, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = AlumniCardSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        alumni_cards = AlumniCard.objects.all()
+        alumni_cards.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class TimeLineView(APIView):
+    def get(self, request):
+        timeline_items = TimeLineItem.objects.all()
+        serializer = TimeLineItemSerializer(timeline_items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TimeLineItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        timeline_items = TimeLineItem.objects.all()
+        timeline_items.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class FacultyCardView(APIView):
+    def get(self, request):
+        faculty_cards = FacultyCard.objects.all()
+        serializer = FacultyCardSerializer(faculty_cards, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FacultyCardSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        faculty_cards = FacultyCard.objects.all()
+        faculty_cards.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class PostView(APIView):
+    def get(self, request):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        posts = Post.objects.all()
+        posts.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
