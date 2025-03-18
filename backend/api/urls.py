@@ -31,4 +31,6 @@ urlpatterns = [
     path('timeline/', views.TimeLineView.as_view(), name='timeline-handling'),
     path('faculty-card/', views.FacultyCardView.as_view(), name='faculty-card-handling'),
     path('posts/', views.PostView.as_view(), name='post-handling'),
+    path('treasury/', views.TreasuryView.as_view(), name='treasury-handling'),
+    path('event-registration/<int:id>/', views.EventRegistrationView.as_view(), name='event-registration-handling'),
 ]

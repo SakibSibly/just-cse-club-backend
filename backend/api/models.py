@@ -290,3 +290,48 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+############### New ########
+
+class EventRegistration(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username + ' - ' + self.event.title
+    
+
+class Treasury(models.Model):
+    amount = models.IntegerField()
+    type = models.CharField(max_length=10, choices=[
+        ('income', 'Income'),
+        ('expense', 'Expense')
+    ])
+    description = models.TextField()
+    trnx_statement = models.TextField()
+    date = models.DateTimeField()
+
+    def __str__(self):
+        return self.description
+
+
+# class EventRegistration(models.Model):
+#     event = models.ForeignKey(Event, related_name='event', on_delete=models.CASCADE)
+#     user = models.ForeignKey(CustomUser, related_name='user', on_delete=models.CASCADE)
+#     registered_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.user.username + ' - ' + self.event.title
+
+
+class EventRegistration(models.Model):
+    event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='event_registrations', on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('event', 'user')
+
+    def __str__(self):
+        return self.user.username + ' - ' + self.event.title

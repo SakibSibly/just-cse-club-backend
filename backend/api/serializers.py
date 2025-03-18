@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice, Feedback, Tag, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post
+from .models import CustomUser, Department, Faculty, Blog, Comment, Event, Notice, Feedback, Tag, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post, Treasury, EventRegistration
 
 
 
@@ -36,6 +36,12 @@ class CommentSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
+        fields = '__all__'
+
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventRegistration
         fields = '__all__'
 
 
@@ -96,4 +102,10 @@ class FacultyCardSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
+        fields = '__all__'
+
+
+class TreasurySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Treasury
         fields = '__all__'

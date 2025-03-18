@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice, Tag, Feedback, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post
-from .serializers import CustomUserSerializer
-from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer, TagSerializer, FeedbackSerializer, StatSerializer, GalleryItemSerializer, ResearchCardSerializer, AlumniCardSerializer, TimeLineItemSerializer, FacultyCardSerializer, PostSerializer
+from .models import CustomUser, OTP, Department, Faculty, Blog, Comment, Event, Notice, Tag, Feedback, Stat, GalleryItem, ResearchCard, AlumniCard, TimeLineItem, FacultyCard, Post, Treasury, EventRegistration
+from .serializers import CustomUserSerializer, TreasurySerializer, EventRegistrationSerializer
+from .serializers import DepartmentSerializer, FacultySerializer, BlogSerializer, CommentSerializer, EventSerializer, NoticeSerializer, TagSerializer, FeedbackSerializer, StatSerializer, GalleryItemSerializer, ResearchCardSerializer, AlumniCardSerializer, TimeLineItemSerializer, FacultyCardSerializer, PostSerializer, TreasurySerializer
 from django.http import Http404
 # from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
@@ -511,3 +511,59 @@ class PostView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+
+class TreasuryView(APIView):
+    def get(self, request):
+        treasury = Treasury.objects.all()
+        serializer = TreasurySerializer(treasury, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TreasurySerializer(data=request.data)
+        if not request.user.is_staff:
+            return Response({'error': 'You are not an admin'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        treasury = Treasury.objects.all()
+        treasury.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventRegistrationView(APIView):
+    def get(self, request, id):
+        events = EventRegistration.objects.filter(id=id)
+        serializer = EventRegistrationSerializer(events, many=True)
+        return Response(serializer.data)
+        
+    def post(self, request, id):
+        # Check if the event exists
+        try:
+            event = Event.objects.get(id=id)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if user is already registered for this event
+        existing_registration = EventRegistration.objects.filter(
+            event_id=id,
+            user=request.user
+        ).exists()
+        
+        if existing_registration:
+            return Response({'error': 'You are already registered for this event'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create new registration
+        serializer = EventRegistrationSerializer(data={
+            'event': id,
+            'user': request.user.id
+        })
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Successfully registered for the event'}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
